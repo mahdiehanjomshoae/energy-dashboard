@@ -11,6 +11,7 @@ import {
 } from "recharts";
 
 import { appLogger } from "./logger";
+import { computeEnergy } from "./energy";
 
 const formSchema = z.object({
   watts: z.number().min(1),
@@ -37,23 +38,15 @@ export default function App() {
     appLogger.debug("Input values are valid", { watts, hours, price });
   }
 
-  let dailyCost = 0;
-  let chartData: { day: number; cost: number }[] = [];
+  let result = null;
 
   try {
     if (parsed.success) {
-      const { watts, hours, price } = parsed.data;
-      const kwh = (watts * hours) / 1000;
-      dailyCost = kwh * price;
-      // 30-day cumulative cost chart
-      chartData = Array.from({ length: 30 }).map((_, i) => ({
-        day: i + 1,
-        cost: dailyCost * (i + 1),
-      }));
+      result = computeEnergy(parsed.data);
 
       appLogger.info("Energy cost computed", {
-        kwhPerDay: kwh,
-        dailyCost,
+        kwhPerDay: result.kwhPerDay,
+        dailyCost: result.dailyCost,
       });
     }
   } catch (err) {
@@ -106,17 +99,19 @@ export default function App() {
         </label>
       </div>
 
-      {!parsed.success ? (
+      {!parsed.success || result === null ? (
         <h2 style={{ color: "red", marginTop: 20 }}>Invalid input values</h2>
       ) : (
         <>
-          <h2 style={{ marginTop: 20 }}>Daily Cost: €{dailyCost.toFixed(2)}</h2>
+          <h2 style={{ marginTop: 20 }}>
+            Daily Cost: €{result.dailyCost.toFixed(2)}
+          </h2>
 
           <h3>Cumulative Cost (30 days)</h3>
 
           <div style={{ width: "100%", height: 300 }}>
             <ResponsiveContainer>
-              <LineChart data={chartData}>
+              <LineChart data={result.chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="day" />
                 <YAxis />

@@ -30,4 +30,7 @@ export default [
       react: { version: "detect" },
     },
   },
+  {
+    ignores: ["jest.config.cjs"],
+  },
 ];
