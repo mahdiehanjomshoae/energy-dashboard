@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { z } from "zod";
 import {
   LineChart,
@@ -9,6 +9,8 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+
+import { appLogger } from "./logger";
 
 const formSchema = z.object({
   watts: z.number().min(1),
@@ -21,23 +23,42 @@ export default function App() {
   const [hours, setHours] = useState(5);
   const [price, setPrice] = useState(0.3);
 
+  useEffect(() => {
+    appLogger.info("App mounted");
+    return () => appLogger.info("App unmounted");
+  }, []);
   const parsed = formSchema.safeParse({ watts, hours, price });
+
+  if (!parsed.success) {
+    appLogger.warn("Validation failed", {
+      issues: parsed.error.issues,
+    });
+  } else {
+    appLogger.debug("Input values are valid", { watts, hours, price });
+  }
 
   let dailyCost = 0;
   let chartData: { day: number; cost: number }[] = [];
 
-  if (parsed.success) {
-    const { watts, hours, price } = parsed.data;
-    const kwh = (watts * hours) / 1000;
-    dailyCost = kwh * price;
+  try {
+    if (parsed.success) {
+      const { watts, hours, price } = parsed.data;
+      const kwh = (watts * hours) / 1000;
+      dailyCost = kwh * price;
+      // 30-day cumulative cost chart
+      chartData = Array.from({ length: 30 }).map((_, i) => ({
+        day: i + 1,
+        cost: dailyCost * (i + 1),
+      }));
 
-    // 30-day cumulative cost chart
-    chartData = Array.from({ length: 30 }).map((_, i) => ({
-      day: i + 1,
-      cost: dailyCost * (i + 1),
-    }));
+      appLogger.info("Energy cost computed", {
+        kwhPerDay: kwh,
+        dailyCost,
+      });
+    }
+  } catch (err) {
+    appLogger.error("Unexpected error during computation", err);
   }
-
   return (
     <div style={{ padding: 40, fontFamily: "Arial, sans-serif" }}>
       <h1>Energy Cost Dashboard</h1>
@@ -48,7 +69,11 @@ export default function App() {
           <input
             type="number"
             value={watts}
-            onChange={(e) => setWatts(Number(e.target.value))}
+            onChange={(e) => {
+              const v = Number(e.target.value);
+              setWatts(v);
+              appLogger.debug("User changed watts", { value: v });
+            }}
           />
         </label>
 
@@ -58,7 +83,11 @@ export default function App() {
             type="number"
             step="0.1"
             value={hours}
-            onChange={(e) => setHours(Number(e.target.value))}
+            onChange={(e) => {
+              const v = Number(e.target.value);
+              setHours(v);
+              appLogger.debug("User changed hours", { value: v });
+            }}
           />
         </label>
 
@@ -68,7 +97,11 @@ export default function App() {
             type="number"
             step="0.01"
             value={price}
-            onChange={(e) => setPrice(Number(e.target.value))}
+            onChange={(e) => {
+              const v = Number(e.target.value);
+              setPrice(v);
+              appLogger.debug("User changed price", { value: v });
+            }}
           />
         </label>
       </div>
