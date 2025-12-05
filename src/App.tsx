@@ -1,3 +1,9 @@
+/**
+ * Main React component for the Energy Dashboard.
+ * Handles user input, validation, logging, chart rendering,
+ * and displays computed energy cost information.
+ */
+
 import { useState, useEffect } from "react";
 import { z } from "zod";
 import {
