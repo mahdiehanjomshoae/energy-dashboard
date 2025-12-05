@@ -1,182 +1,51 @@
-# **Energy Dashboard -- TFSD Lecture 4 Assignment**
+Energy Dashboard
 
-**Author:** *Mahdiyeh Anjomshoae*\
-**Repository:**
-https://github.com/mahdiehanjomshoae/energy-dashboard.git\
-**Build Tool:** **Webpack** (with TypeScript + React)
+A simple interactive dashboard to calculate and visualize daily, monthly, and yearly energy consumption and cost.
 
-------------------------------------------------------------------------
+- Features
 
-##  **1. Project Description**
+Real-time validation using Zod
+Visualization with Recharts
+Custom structured logger (debug / info / warn / error)
+Unit-tested computation logic (Jest + ts-jest)
+Built with TypeScript + React + Webpack
 
-This project demonstrates the use of a **modern build automation tool**
-(Webpack)\
-to build, bundle, run, and package a **non-trivial TypeScript + React
-application**.
+- Installation
+  git clone https://github.com/mahdiehanjomshoae/energy-dashboard.git
+  cd energy-dashboard
+  npm install
 
-### The application is an **Energy Dashboard**:
+- Running in Development Mode
+  npm run dev
 
--   User enters:
-    -   Device power (Watts)
-    -   Daily usage time (Hours)
-    -   Electricity price per kWh (€)
--   App calculates:
-    -   Daily energy consumption (kWh)
-    -   Daily cost (€)
-    -   A **30-day cumulative cost chart**
--   Validates inputs using **Zod**
--   Displays results with **Recharts** visualization
+The application opens at:http://localhost:3000
 
-### Why this meets the course requirements:
+- Build for Production
+  npm run build
+  Output is located in:dist/
 
-✔ Non-trivial codebase\
-✔ External dependencies (`react`, `recharts`, `zod`)\
-✔ Build automation using **Webpack**\
-✔ Supports compilation, bundling, packaging\
-✔ Version management using `npm version`
+- Testing
+  npm test
+  Unit tests cover: kWh calculation
+  Daily, monthly, yearly cost formulas
+  Edge cases
 
-------------------------------------------------------------------------
+- Documentation
 
-##  **2. Build Tool -- Webpack**
+This project includes:
+A course 4 report in: docs/course4/README.md
+A course 5–6 report in: docs/course5-6/README_TFSD_5-6.md
+Additional tutorial required by TFSD course is available in: docs/tutorials/tutorial.md
+Reference documentation is available in: docs/reference/
 
-Webpack handles:
+Additional tutorial and documentation required by TFSD course
 
-### ✔ Dependency management
+- License
 
-Through `package.json`
+This project is licensed under the MIT License.
+See the LICENSE file for details.
 
-### ✔ Compilation
+- Author
 
--   TypeScript → JavaScript (`ts-loader`)\
--   React JSX → JS
-
-### ✔ Bundling
-
-Entry: `src/index.tsx`\
-Output: `/dist/bundle.js`
-
-### ✔ Development server
-
-Using `webpack-dev-server` (port 3000)
-
-### ✔ Production build
-
-Minified and optimized output via:
-
-``` bash
-npm run build
-```
-
-------------------------------------------------------------------------
-
-##  **3. Project Structure**
-
-    energy-dashboard/
-    │
-    ├── src/
-    │   ├── App.tsx
-    │   ├── index.tsx
-    │
-    ├── index.html
-    ├── package.json
-    ├── tsconfig.json
-    ├── webpack.config.js
-    │
-    └── README.md
-
-------------------------------------------------------------------------
-
-##  **4. Prerequisites**
-
--   Node.js ≥ 18\
--   npm ≥ 8\
--   Git
-
-------------------------------------------------------------------------
-
-#  **5. How to Install, Build, and Run**
-
-###  Clone the repository
-
-``` bash
-git clone https://github.com/mahdiehanjomshoae/energy-dashboard.git
-cd energy-dashboard
-```
-
-###  Install dependencies
-
-``` bash
-npm install
-```
-
-###  Run development server
-
-``` bash
-npm run dev
-```
-
-The app will open automatically at:
-
-    http://localhost:3000
-
-###  Create production build
-
-``` bash
-npm run build
-```
-
-This generates `dist/` containing optimized bundled files.
-
-------------------------------------------------------------------------
-
-#  **6. Version Management**
-
-The project uses npm's built-in versioning:
-
-``` bash
-npm version patch -m "release: bump patch version to %s"
-git push --follow-tags
-```
-
-This performs:
-
--   Updating the `"version"` in package.json\
--   Creating a Git tag\
--   Pushing tag + commits
-
-------------------------------------------------------------------------
-
-#  **7. Packaging**
-
-Production packaging is handled fully via Webpack:
-
-``` bash
-npm run build
-```
-
-This creates an optimized deployable bundle in:
-
-    dist/
-
-Optional npm packaging:
-
-``` bash
-npm pack
-```
-
-Creates a `.tgz` tarball.
-
-------------------------------------------------------------------------
-
-#  **8. External Dependencies**
-
-The project uses several external libraries:
-
-  Library                   Purpose
-  ------------------------- -----------------------------
-  **react** / react-dom     UI framework
-  **recharts**              Charting & visualization
-  **zod**                   Input validation
-  **webpack**               Build automation & bundling
-  **ts-loader**             TypeScript → JS
-  **html-webpack-plugin**   HTML template mgmt
+Mahdiyeh Anjomshoae
+M1 CPS2 – Université Jean Monnet & Mines Saint-Étienne
