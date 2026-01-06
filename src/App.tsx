@@ -58,6 +58,16 @@ export default function App() {
   } catch (err) {
     appLogger.error("Unexpected error during computation", err);
   }
+
+  let chartData: { day: number; cost: number }[] = [];
+
+  if (result) {
+    chartData = Array.from({ length: 30 }, (_, i) => ({
+      day: i + 1,
+      cost: result.dailyCost * (i + 1),
+    }));
+  }
+
   return (
     <div style={{ padding: 40, fontFamily: "Arial, sans-serif" }}>
       <h1>Energy Cost Dashboard</h1>
@@ -117,7 +127,7 @@ export default function App() {
 
           <div style={{ width: "100%", height: 300 }}>
             <ResponsiveContainer>
-              <LineChart data={result.chartData}>
+              <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="day" />
                 <YAxis />
